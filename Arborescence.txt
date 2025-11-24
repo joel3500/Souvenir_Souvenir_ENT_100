@@ -1,0 +1,16 @@
+/
+├─ app.py                   # tourne sur Render
+├─ database.py
+├─ models.py
+├─ requirements.txt
+├─ Dockerfile
+├─ render.yaml
+├─ .gitignore
+├─ .dockerignore
+├─ templates/               # utilisé par Flask (Render)
+│  ├─ base.html
+│  └─ index.html
+├─ static/
+│  ├─ style.css             # << ton CSS (inchangé)
+│  └─ image_principale.jpg  # << l’image de bannière référencée par ton CSS
+└─ index.html               # << GitHub Pages sert CE fichier

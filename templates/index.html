@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="poster_un_chat">
+      <form id="chat-form" class="chat-form" action="/post" method="post">
+        <div class="row">
+          <label for="prenom">Prénom</label>
+          <input type="text" id="prenom" name="prenom" placeholder="Alice" required>
+        </div>
+        <div class="row">
+          <label for="filiaire">Filière</label>
+          <input type="text" id="filiaire" name="filiaire" placeholder="Arts et Lettres" required>
+        </div>
+        <div class="row">
+          <label for="commentaire">Commentaire</label>
+          <textarea id="commentaire" name="commentaire" placeholder="Perso j'ai beaucoup aimé la séance sur l'IKIGAI. Apprendre à ce connaitre :). C'est une notion fondamentale pour bien cerner oèu on s'en va dans la vie." required></textarea>
+        </div>
+        <button id="send-btn" type="submit">Envoyer</button>
+        <span id="status" class="status" aria-live="polite"></span>
+      </form>
+    </div>
+
+    <hr/><!-- ( La petite barre horizontale qui sert de séparateur ) -->
+
+    <br><br><br>
+    <div class="le_chat" id="le_chat">
+      {% for m in messages %}
+        <div class="chat-line">
+          <strong>{{ m.prenom }}</strong> ( <em>{{ m.filiaire }}</em> ) : {{ m.commentaire }}
+        </div>
+      {% else %}
+        <p class="empty">Aucun message pour le moment — lance la discussion !</p>
+      {% endfor %}
+    </div>
+{% endblock %}
+
+<!-- ( Socket.IO client du base.html ) -->
+
+{% block scripts %}
+
+    <script>
+      const form = document.getElementById('chat-form');
+      const btn  = document.getElementById('send-btn');
+      const st   = document.getElementById('status');
+      const chat = document.getElementById('le_chat');
+
+      // Réception d'un nouveau message en live
+      window.socket.on('chat:new', (msg) => {
+        // Supprime le "empty" si présent
+        const empty = chat.querySelector('.empty');
+        if (empty) empty.remove();
+
+        // Crée la ligne au bon format et l'ajoute EN HAUT (ordre descendant)
+        const line = document.createElement('div');
+        line.className = 'chat-line';
+        line.innerHTML = `<strong>${escapeHtml(msg.prenom)}</strong> ( <em>${escapeHtml(msg.filiaire)}</em> ) : ${escapeHtml(msg.commentaire)}`;
+        chat.prepend(line);
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        btn.disabled = true;
+        st.textContent = 'Envoi...';
+
+        const payload = {
+          prenom: document.getElementById('prenom').value.trim(),
+          filiaire: document.getElementById('filiaire').value.trim(),
+          commentaire: document.getElementById('commentaire').value.trim()
+        };
+
+        try {
+          const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) {
+            const data = await res.json().catch(()=>({error:'Erreur'}));
+            throw new Error(data.error || ('HTTP ' + res.status));
+          }
+          // On laisse le serveur diffuser l'événement; on ne duplique pas localement.
+          form.reset();
+          st.textContent = 'Envoyé ✔';
+        } catch (err) {
+          st.textContent = 'Erreur: ' + err.message;
+        } finally {
+          btn.disabled = false;
+          setTimeout(()=> st.textContent = '', 2000);
+        }
+      });
+
+      // Petite fonction pour éviter l'injection HTML dans le chat
+      function escapeHtml(str) {
+        return String(str)
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#039;');
+      }
+    </script>
+
+{% endblock %}

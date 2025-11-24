@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Souvenir-Souvenir ENT 100</title>
+
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins|Sofia|Trirong|Audiowide">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&effect=fire|neon|outline|emboss|shadow-multiple">
+
+  <!-- Ton CSS -->
+  <link rel="stylesheet" href="static/style.css">
+
+  <!-- Socket.IO client -->
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body>
+
+  <h2> Souvenir-Souvenir ENT100 <br><br> ON RESTE EN CONTACT </h2>
+
+  <!-- Bandeau image (ton CSS s’occupe du fond) -->
+  <header class="header_avec_image"></header>
+
+  <div class="grand_cadre_du_chat">
+    <main class="container">
+      <!-- poster_un_chat -->
+      <div class="poster_un_chat">
+        <!-- IMPORTANT : action absolue pour fallback sans JS -->
+        <form id="chat-form" class="chat-form" action="https://souvenir_souvenir_ent_100.onrender.com/post" method="post">
+          <div class="row">
+            <label for="prenom">Prénom</label>
+            <input type="text" id="prenom" name="prenom" placeholder="Alice" required>
+          </div>
+          <div class="row">
+            <label for="filiaire">Filière</label>
+            <input type="text" id="filiaire" name="filiaire" placeholder="Arts et Lettres" required>
+          </div>
+          <div class="row">
+            <label for="commentaire">Commentaire</label>
+            <textarea id="commentaire" name="commentaire" placeholder="Coool ! c'est super d'avoir de quoi interagir avec les responsables :)" required></textarea>
+          </div>
+          <button id="send-btn" type="submit">Envoyer</button>
+          <span id="status" class="status" aria-live="polite"></span>
+        </form>
+      </div>
+
+      <hr><!-- ( La petite barre horizontale qui sert de séparateur ) -->
+
+      <!-- le_chat -->
+      <div class="le_chat" id="le_chat">
+        <p class="empty">Aucun message pour le moment — lance la discussion !</p>
+      </div>
+      
+    </main>
+  </div>
+
+  <script>
+    // Ton backend Render
+    const RENDER_BASE = "https://marketing-chat.onrender.com";
+
+    // 1) Créer la socket (avec reconnexion agressive si instance est froide)
+    const socket = io(RENDER_BASE, { 
+        transports: ["websocket", "polling"],
+        reconnection: true,
+        reconnectionAttempts: 20,
+        reconnectionDelay: 1000
+    });
+
+    // (optionnel) logs utiles
+    socket.on("connect", () => console.log("[SOCKET] connecté", socket.id));
+    socket.on("connect_error", (e) => console.error("[SOCKET] erreur", e));
+    
+    // 2) Rendre les messages à la réception /// Écoute l'événement envoyé par le serveur  
+    socket.on("chat:new", (msg) => renderMessage(msg));
+
+    // 3) Warm-up + historique
+    async function warmAndLoad() {
+      try {
+        await fetch(`${RENDER_BASE}/api/health`, { method: "GET" }); // réveille DB
+        if (socket.disconnected) socket.connect();                    // force la socket si besoin
+        const r = await fetch(`${RENDER_BASE}/api/chat`, { method: "GET" });
+        if (r.ok) (await r.json()).forEach?.(renderMessage);
+      } catch (e) {
+        setTimeout(warmAndLoad, 4000); // réessaye si Render est encore froid
+      }
+    }
+    document.addEventListener("DOMContentLoaded", warmAndLoad);
+
+    //-----------------  Fin de la connection Directe des l'ouverture de la page ( Processus normal èa present ).
+    const form = document.getElementById('chat-form');
+    const btn  = document.getElementById('send-btn');
+    const st   = document.getElementById('status');
+    const chat = document.getElementById('le_chat');
+
+    // Rendu d'une ligne: Prenom (Filière) : Commentaire
+    function renderMessage({ prenom, filiaire, commentaire }) {
+      if (!prenom || !filiaire || !commentaire) return;
+
+      const empty = chat.querySelector(".empty");
+      if (empty) empty.remove();
+
+      const line = document.createElement("div");
+      line.className = "chat-line";
+      line.innerHTML = `<strong>${escapeHtml(prenom)}</strong> (<em>${escapeHtml(filiaire)}</em>) : ${escapeHtml(commentaire)}`;
+      // Ajout en haut (ordre descendant)
+      chat.prepend(line);
+    }
+
+    // Protection simple anti-injection
+    function escapeHtml(s) {
+      return String(s)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+  </script>
+
+  <footer>
+      Merci à Notre Profe, de nous avoir initié au monde de l'ENTREPRENARIAT | 2ENT100 A2025 : Capacité à Entreprendre | UQAC | Automne 2025 <br><br>
+  </footer>
+  
+</body>
+</html>

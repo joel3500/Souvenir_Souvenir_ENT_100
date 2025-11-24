@@ -1,0 +1,129 @@
+
+/* selecteur universel */ /* ce truc sert à éviter les decallages de padding ou margin par defaut existant sur certaines balises */
+* { box-sizing: border-box; }
+
+/*body { 
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; 
+    line-height: 1.5; 
+    margin: 0; 
+    padding: 0; 
+    background: #f7f7fb; 
+    color: #222; 
+}
+*/
+
+body 
+{   font-family : Trirong, Poppins, sans-cherif; 
+    font-size : 20px; 
+    background-color: rgb(248, 243, 243);
+}
+
+.grand_cadre_du_chat { width: 60%; margin: auto; margin-top:20px; margin-bottom:270px; height: auto; border-radius: 20px; }
+.container { width: 100%; height: auto; background: #fff; padding: 7px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+.chat-form .row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+input[type="text"], textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; }
+textarea { min-height: 90px; resize: vertical; }
+button { padding: 10px 14px; border: none; border-radius: 10px; cursor: pointer; background: #2f6fed; color: #fff; font-size: 15px;}
+button:hover { opacity: 0.95; }
+.poster_un_chat { width: 90%; margin-left: 5%; }
+.le_chat { display: flex; flex-direction: column; gap: 10px; width: 90%; margin-left:5%; margin-bottom: 10px; }
+.chat-line { padding: 10px 12px; background-color: yellow /*#8aa1f5*/; border: 1px solid #e1e6ff; border-radius: 10px; margin-bottom: 20px; }
+.empty { color: #777; font-style: italic; }
+.status { margin-left: 10px; font-size: .95rem; color:#444; }
+
+
+.header_avec_image
+{
+    display : inline-block;
+    width : 60%;
+    height: 270px;
+    margin-left: 20%;
+    background-image: url("emploiretraite_ca_julie_dufresne_0.jpg");
+    background-position: right; /* Center the image */
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius : 20px;
+    padding : 10px;
+}
+
+.header_sans_image
+{
+    display : inline-block;
+    width : 60%;
+    margin-left: 20%;
+    height : 500px;
+    padding : 10px;
+}
+
+h2 
+{   font-family : Audiowide; 
+    text-align:center; 
+    color : blue;
+    width : 60%; 
+    margin : auto;
+    margin-bottom: 20px; 
+    border-bottom : 1px black solid; 
+    text-shadow:4px 4px 4px white;
+}
+
+video 
+{ 
+    width: 320px; 
+    height : 240px;
+}
+
+footer 
+{   position:static; 
+    left:10px; 
+    right:10px; 
+    bottom:10px; 
+    background:black; 
+    text-align:justify; 
+    min-height:40px; 
+    color: white;
+    font-size : 12px; 
+}
+
+iframe, video
+{
+    width: 100%;
+    height : 100%;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+/* <= 768px : empile tout en 1 colonne, boutons full width */
+@media (max-width: 768px) {
+
+  .header_avec_image, .header_sans_image, h2, .poster_un_chat, .le_chat { 
+    width: 90%; 
+    margin-left: 5%;
+  }
+  
+   video { 
+    width: 100%; 
+    height : auto;
+   }
+
+   .grand_cadre_du_chat { width: 90%; }
+
+  footer { position: static; }  /* évite de recouvrir le contenu */
+}
+
+/* <= 480px : densifie encore */
+@media (max-width: 480px) {
+    
+  .header_avec_image, .header_sans_image, h2, .poster_un_chat, .le_chat { 
+    width: 90%; 
+    margin-left: 5%;
+  }
+ 
+   video { 
+    width: 100%; 
+    height : auto;
+   }
+
+   .grand_cadre_du_chat { width: 90%; }
+
+   footer { position: static; }  /* évite de recouvrir le contenu */
+}

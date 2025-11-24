@@ -1,0 +1,45 @@
+# --- Python de base ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# --- Environnements virtuels ---
+.venv/
+venv/
+ENV/
+env/
+
+# --- Environnements / secrets ---
+.env
+.env.*
+*.env
+
+# --- Bases locales / artefacts ---
+*.db
+*.sqlite
+*.sqlite3
+instance/
+*.log
+.cache/
+.pytest_cache/
+.mypy_cache/
+.tox/
+.coverage
+htmlcov/
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+
+# --- Front optionnel ---
+node_modules/
+staticfiles/

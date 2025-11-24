@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Merci à notre Profe, de nous avoir initié au monde de l'ENTREPRENARIAT</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins|Sofia|Trirong|Audiowide">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&effect=fire|neon|outline|emboss|shadow-multiple"> 
+  <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+</head>
+
+<body>
+
+  <h2> Merci à notre Profe de nous avoir initié au monde de l'ENTREPRENARIAT <br><br>
+  </h2>
+
+  <header class="header_avec_image">
+  </header>
+
+  <h2> (notre profe & mentore) </h2>
+
+  <div class="grand_cadre_du_chat">
+      <main class="container">
+      {% block content %}{% endblock %}
+      </main>
+	</div>
+
+  
+  <!-- Socket.IO client -->
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  
+  <script>
+    try {
+      window.socket = io();
+      window.socket.on('connect', () => console.log('[socket] connect id=', window.socket.id));
+      window.socket.on('connect_error', (e) => console.warn('[socket] connect_error', e));
+    } catch (e) {
+      console.warn('Socket.IO indisponible:', e);
+    }
+  </script>
+
+  {% block scripts %}{% endblock %}
+</body>
+    <!-- Le pied de page -->
+	<footer>
+        Merci à Notre Profe, de nous avoir initié au monde de l'ENTREPRENARIAT | 2ENT100 A2025 : Capacité à Entreprendre | UQAC | Automne 2025 <br><br>
+ 
+        Un petit chat oèu nous laissons des commentaires sur notre cours. Les activités que nous y avons eu. Nous tous ici issus de filières différences.
+        Nous avons apprécié le cours. Ce chat nous permet aussi de garder les contacts les uns des autres. Réseau d'interaction multidisciplinaire qui nait avec à la tete notre prof et mentore Julie Dufresne.
+        J'ai fait la rencontre de Adja, très entousiate dans l'idée d'organiser des évenement; la rencontre de Brice, 
+        franchement... son patron va beaucoup l'apprécier. 
+        Il n'est pas en informatique, mais il est très informmé sur le monde des TI; Et certains parmi vous ont rencontré le Boss Quewell, un type très sympa, qui a foutu plein de chagrins d'amour aus filles autour de lui. <br>
+        Plus sérieusement, nous allons tous nous perdre de vu d'ici quelques mois pour les finissants. 
+        C'est important de rester connecté et commencer à batir nos réseaux. Restons en contact avec notre profe, et les uns avec les autres. 
+        Qui sait ? peut-être que dans 2 ans j'appellerai Adja pour organiser mon Mariage (rire) ! <br>
+        Sentez-vous libre de continuer à utiliser ce chat après le cours dans le ENTREPRENARIAL et TABLEAU DE BORD. 
+        Le but principale étant de dire merci èa notre profe de nous avoir encadré avec passion devenant ainsi officiellement notre première MENTOR dans le monde ENTREPRENARIAL. <br>
+	</footer>
+
+</html>
