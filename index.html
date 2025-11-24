@@ -27,7 +27,7 @@
       <!-- poster_un_chat -->
       <div class="poster_un_chat">
         <!-- IMPORTANT : action absolue pour fallback sans JS -->
-        <form id="chat-form" class="chat-form" action="https://souvenir_souvenir_ent_100.onrender.com/post" method="post">
+        <form id="chat-form" class="chat-form" action="https://souvenir-souvenir-ent-100.onrender.com/post" method="post">
           <div class="row">
             <label for="prenom">Prénom</label>
             <input type="text" id="prenom" name="prenom" placeholder="Alice" required>
@@ -57,7 +57,7 @@
 
   <script>
     // Ton backend Render
-    const RENDER_BASE = "https://marketing-chat.onrender.com";
+    const RENDER_BASE = "https://souvenir-souvenir-ent-100.onrender.com";
 
     // 1) Créer la socket (avec reconnexion agressive si instance est froide)
     const socket = io(RENDER_BASE, { 
